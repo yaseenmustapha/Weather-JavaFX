@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.controllers.UserManagerController">
+   <top>
+      <VBox prefHeight="115.0" prefWidth="640.0" BorderPane.alignment="CENTER">
+         <children>
+            <MenuBar>
+              <menus>
+                <Menu mnemonicParsing="false" onShowing="#switchDashboard" text="Dashboard">
+                     <items>
+                        <MenuItem mnemonicParsing="false" text="Unspecified Action" />
+                     </items>
+                </Menu>
+                <Menu mnemonicParsing="false" onShowing="#switchLocationManager" text="Locations">
+                     <items>
+                        <MenuItem mnemonicParsing="false" text="Unspecified Action" />
+                     </items></Menu>
+                  <Menu mnemonicParsing="false" text="Users" />
+                <Menu mnemonicParsing="false" text="Help">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="About" />
+                  </items>
+                </Menu>
+              </menus>
+            </MenuBar>
+            <StackPane prefHeight="36.0" prefWidth="640.0">
+               <children>
+                  <Label fx:id="currentUserLabel" text="Current User">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+               </children>
+               <VBox.margin>
+                  <Insets bottom="10.0" top="10.0" />
+               </VBox.margin>
+            </StackPane>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <VBox prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <Label text="Units">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets bottom="2.0" />
+                           </VBox.margin>
+                        </Label>
+                        <RadioButton fx:id="radioMetric" mnemonicParsing="false" onAction="#metricPressed" text="Metric">
+                           <VBox.margin>
+                              <Insets bottom="5.0" />
+                           </VBox.margin>
+                        </RadioButton>
+                        <RadioButton fx:id="radioImperial" mnemonicParsing="false" onAction="#imperialPressed" text="Imperial" />
+                     </children>
+                     <HBox.margin>
+                        <Insets left="70.0" />
+                     </HBox.margin>
+                  </VBox>
+                  <VBox layoutX="20.0" layoutY="10.0" prefHeight="63.0" prefWidth="177.0">
+                     <children>
+                        <Label text="Subscribe to Weather Alerts">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets bottom="2.0" />
+                           </VBox.margin>
+                        </Label>
+                        <RadioButton fx:id="radioYes" mnemonicParsing="false" onAction="#subscribePressed" text="Yes">
+                           <VBox.margin>
+                              <Insets bottom="5.0" />
+                           </VBox.margin>
+                        </RadioButton>
+                        <RadioButton fx:id="radioNo" mnemonicParsing="false" onAction="#unsubscribePressed" text="No" />
+                     </children>
+                     <HBox.margin>
+                        <Insets left="55.0" />
+                     </HBox.margin>
+                  </VBox>
+                  <Button mnemonicParsing="false" onAction="#deleteCurrentUser" text="Delete Current User">
+                     <HBox.margin>
+                        <Insets left="45.0" top="20.0" />
+                     </HBox.margin>
+                  </Button>
+               </children>
+               <VBox.margin>
+                  <Insets bottom="20.0" />
+               </VBox.margin>
+            </HBox>
+         </children></VBox>
+   </top>
+   <bottom>
+      <HBox prefHeight="15.0" prefWidth="640.0" BorderPane.alignment="CENTER">
+         <children>
+            <TextField fx:id="userName" prefHeight="25.0" prefWidth="186.0" promptText="Name">
+               <HBox.margin>
+                  <Insets right="10.0" />
+               </HBox.margin>
+            </TextField>
+            <TextField fx:id="userEmail" prefHeight="25.0" prefWidth="234.0" promptText="Email">
+               <HBox.margin>
+                  <Insets right="10.0" />
+               </HBox.margin>
+            </TextField>
+            <Button mnemonicParsing="false" onAction="#addUser" text="Add User">
+               <HBox.margin>
+                  <Insets right="10.0" />
+               </HBox.margin>
+            </Button>
+            <ComboBox fx:id="userComboBox" onAction="#switchUser" prefHeight="25.0" prefWidth="104.0" promptText="Switch User" />
+         </children>
+         <BorderPane.margin>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="30.0" />
+         </BorderPane.margin>
+      </HBox>
+   </bottom>
+   <center>
+      <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <ListView fx:id="globalLocationsList" prefHeight="200.0" prefWidth="200.0" />
+            <VBox prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <StackPane prefHeight="150.0" prefWidth="200.0">
+                     <children>
+                        <Button mnemonicParsing="false" onAction="#addLocation" text="Add &gt;" />
+                     </children>
+                  </StackPane>
+                  <StackPane prefHeight="150.0" prefWidth="200.0">
+                     <children>
+                        <Button mnemonicParsing="false" onAction="#removeLocation" text="&lt; Remove" />
+                     </children>
+                  </StackPane>
+               </children>
+            </VBox>
+            <ListView fx:id="userLocationsList" prefHeight="200.0" prefWidth="200.0" />
+         </children>
+         <BorderPane.margin>
+            <Insets left="70.0" right="70.0" />
+         </BorderPane.margin>
+      </HBox>
+   </center>
+</BorderPane>

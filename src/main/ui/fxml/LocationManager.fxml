@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.controllers.LocationManagerController">
+   <top>
+      <VBox prefWidth="1280.0" BorderPane.alignment="CENTER">
+         <children>
+            <MenuBar>
+              <menus>
+                <Menu mnemonicParsing="false" onShowing="#switchDashboard" text="Dashboard">
+                     <items>
+                        <MenuItem mnemonicParsing="false" text="Unspecified Action" />
+                     </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Locations" />
+                  <Menu mnemonicParsing="false" onShowing="#switchUserManager" text="Users">
+                    <items>
+                      <MenuItem mnemonicParsing="false" text="Action 1" />
+                    </items>
+                  </Menu>
+                <Menu mnemonicParsing="false" text="Help">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="About" />
+                  </items>
+                </Menu>
+              </menus>
+            </MenuBar>
+            <HBox prefHeight="18.0" prefWidth="1260.0">
+               <children>
+                  <TextField fx:id="locationName" onKeyPressed="#populateAutocompleteResults" prefHeight="25.0" prefWidth="184.0" promptText="Location Name">
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
+                  </TextField>
+                  <TextField fx:id="locationLat" prefWidth="100.0" promptText="Latitude">
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
+                  </TextField>
+                  <TextField fx:id="locationLong" prefWidth="100.0" promptText="Longitude">
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
+                  </TextField>
+                  <Button fx:id="add" mnemonicParsing="false" onAction="#addLocation" text="Add">
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button fx:id="addCollection" mnemonicParsing="false" onAction="#addLocationCollectionOnly" text="Collection Only">
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#deleteLocation" text="Delete" />
+               </children>
+               <VBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </VBox.margin>
+            </HBox>
+         </children></VBox>
+   </top>
+   <center>
+      <TableView fx:id="locationTable" editable="true" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <columns>
+          <TableColumn fx:id="activeColumn" editable="false" prefWidth="61.0" sortable="false" text="Active" />
+          <TableColumn fx:id="nameColumn" minWidth="100.0" onEditCommit="#editLocationName" prefWidth="323.0" sortType="DESCENDING" text="Name" />
+            <TableColumn fx:id="latColumn" onEditCommit="#editLocationLat" prefWidth="134.0" sortType="DESCENDING" text="Latitude" />
+            <TableColumn fx:id="longColumn" onEditCommit="#editLocationLong" prefWidth="121.0" sortType="DESCENDING" text="Longitude" />
+        </columns>
+      </TableView>
+   </center>
+</BorderPane>
