@@ -1,5 +1,5 @@
 # Weather-JavaFX
-Simple weather application using JavaFX in conjunction with Dark Sky and GMaps APIs.
+Simple weather application using JavaFX in conjunction with Dark Sky and Google Maps APIs.
 
 Personal project for CPSC 210 at UBC.
 
