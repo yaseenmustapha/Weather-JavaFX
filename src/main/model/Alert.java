@@ -9,17 +9,15 @@ public class Alert {
     private String time;
     private String expires;
     private String description;
-    private String uri;
     private Boolean notified;
 
-    public Alert(String title, int time, int expires, String description, String uri) {
+    public Alert(String title, int time, int expires, String description) {
         this.title = title;
 
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         this.time = dateFormat.format(new Date((long)time * 1000));
         this.expires = dateFormat.format(new Date((long)expires * 1000));
         this.description = description.replaceAll("\\*", "\n*");
-        this.uri = uri;
         this.notified = false;
     }
 
@@ -45,9 +43,5 @@ public class Alert {
 
     public String getDescription() {
         return description;
-    }
-
-    public String getUri() {
-        return uri;
     }
 }

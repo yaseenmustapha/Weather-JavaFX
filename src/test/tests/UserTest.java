@@ -21,8 +21,7 @@ public class UserTest {
         u.addLocation(l);
         u.setSubscribed(true);
         assertTrue(u.isSubscribed());
-        l.setAlert(new Alert("Warning", 1565337600, 1565341200, "Description",
-                "https://www.google.ca/"));
+        l.setAlert(new Alert("Warning", 1565337600, 1565341200, "Description"));
         u.update(l, u);
     }
 
@@ -53,7 +52,6 @@ public class UserTest {
         Location l = new Location("Vancouver", "10", "12");
         u.addLocation(l);
         u.setSubscribed(true);
-        l.setAlert(new Alert("Warning", 1565337600, 1565341200, "Description",
-                "https://www.google.ca/"));
+        l.setAlert(new Alert("Warning", 1565337600, 1565341200, "Description"));
     }
 }

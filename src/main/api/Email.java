@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 // Reference: based on video by Genuine Coder (https://www.youtube.com/watch?v=A7HAB5whD6I)
 public class Email {
     private static String appEmail = "ubcweatherapp@gmail.com";
-    private static String appPassword = "javaiscool";
+    private static String appPassword = System.getenv("APP_PASS");
 
     public static void sendMail(User recipient, Location alertedLocation) throws Exception {
         System.out.println("Preparing to send email...");
@@ -53,8 +53,7 @@ public class Email {
             message.setText(alert.getTitle() + "\n"
                             + "Time: " + alert.getTime() + "\n"
                             + "Expires: " + alert.getExpires() + "\n\n"
-                            + alert.getDescription() + "\n"
-                            + "For more information: " + alert.getUri());
+                            + alert.getDescription() + "\n");
             return message;
         } catch (Exception e) {
             Logger.getLogger(Email.class.getName()).log(Level.SEVERE, null, e);

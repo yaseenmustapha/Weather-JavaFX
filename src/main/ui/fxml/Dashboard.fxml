@@ -23,11 +23,6 @@
                      <items>
                         <MenuItem mnemonicParsing="false" text="Unspecified Action" />
                      </items></Menu>
-                <Menu mnemonicParsing="false" text="Help">
-                  <items>
-                    <MenuItem mnemonicParsing="false" text="About" />
-                  </items>
-                </Menu>
               </menus>
             </MenuBar>
          </children>
@@ -54,11 +49,16 @@
                                           <Font size="22.0" />
                                        </font>
                                     </Label>
+                                     <Label onMouseClicked="#openGithub" style="-fx-text-fill: blue;" text="github.com/yaseenmustapha">
+                                         <font>
+                                             <Font size="18.0" />
+                                         </font>
+                                     </Label>
                                  </children>
                               </VBox>
                            </center>
                            <bottom>
-                              <Label onMouseClicked="#openDarkSky" text="Powered by Dark Sky" BorderPane.alignment="CENTER">
+                              <Label onMouseClicked="#openDarkSky" text="Powered by OpenWeather One Call API 3.0" BorderPane.alignment="CENTER">
                                  <BorderPane.margin>
                                     <Insets bottom="10.0" />
                                  </BorderPane.margin>

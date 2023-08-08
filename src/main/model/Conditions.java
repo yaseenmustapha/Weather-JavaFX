@@ -10,18 +10,18 @@ public class Conditions {
     private String summary;
     private String icon;
     private double precipIntensity;
-    private double precipProbability;
+    private double uvIndex;
     private double temperature;
     private double apparentTemperature;
     private double dewPoint;
-    private double humidity;
-    private double pressure;
+    private int humidity;
+    private int pressure;
     private double windSpeed;
     private double windBearing;
 
-    public Conditions(int time, String summary, String icon, double precipIntensity, double precipProbability,
-                      double temperature, double apparentTemperature, double dewPoint, double humidity,
-                      double pressure, double windSpeed, int windBearing) {
+    public Conditions(int time, String summary, String icon, double precipIntensity, double uvIndex,
+                      double temperature, double apparentTemperature, double dewPoint, int humidity,
+                      int pressure, double windSpeed, int windBearing) {
         this.timeUnix = time;
 
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -30,7 +30,7 @@ public class Conditions {
         this.summary = summary;
         this.icon = icon;
         this.precipIntensity = precipIntensity;
-        this.precipProbability = precipProbability;
+        this.uvIndex = uvIndex;
         this.temperature = temperature;
         this.apparentTemperature = apparentTemperature;
         this.dewPoint = dewPoint;
@@ -52,8 +52,8 @@ public class Conditions {
         return precipIntensity;
     }
 
-    public double getPrecipProbability() {
-        return precipProbability;
+    public double getUvIndex() {
+        return uvIndex;
     }
 
     public double getTemperature() {
@@ -68,11 +68,11 @@ public class Conditions {
         return dewPoint;
     }
 
-    public double getHumidity() {
+    public int getHumidity() {
         return humidity;
     }
 
-    public double getPressure() {
+    public int getPressure() {
         return pressure;
     }
 

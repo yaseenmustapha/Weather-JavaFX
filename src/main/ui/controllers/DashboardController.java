@@ -13,9 +13,8 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import model.Conditions;
 import model.Location;
@@ -71,10 +70,10 @@ public class DashboardController extends MasterController {
         if (User.getCurrentUser().isMetric()) {
             tempUnits = "°C";
             precipUnits = "mm/hr";
-            windUnits = "km/hr";
+            windUnits = "kph";
         } else {
             tempUnits = "°F";
-            precipUnits = "in/hr";
+            precipUnits = "mm/hr";
             windUnits = "mph";
         }
     }
@@ -107,13 +106,22 @@ public class DashboardController extends MasterController {
     private void openDarkSky() {
         try {
             Desktop desktop = java.awt.Desktop.getDesktop();
-            URI url = new URI("https://darksky.net/poweredby/");
+            URI url = new URI("https://openweathermap.org/api");
             desktop.browse(url);
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
 
-
+    @FXML
+    private void openGithub() {
+        try {
+            Desktop desktop = java.awt.Desktop.getDesktop();
+            URI url = new URI("https://github.com/yaseenmustapha");
+            desktop.browse(url);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void instantiateLayouts() {
@@ -133,15 +141,21 @@ public class DashboardController extends MasterController {
             VBox day = new VBox(10);
             day.setStyle("-fx-padding: 10;" + "-fx-border-style: solid inside;" + "-fx-border-width: 0.5;"
                     + "-fx-border-insets: 5;" + "-fx-border-radius: 2;" + "-fx-border-color: grey;");
-            ImageView dailyImage = new ImageView(new Image("ui/images/" + dailyIcons.get(i) + ".png",
-                    40, 40, false, false));
+
+            ImageView dailyImage = new ImageView(new Image("https://openweathermap.org/img/wn/" + dailyIcons.get(i) + "@2x.png"));
+            Pane imageContainer = new Pane();
+            imageContainer.getChildren().add(dailyImage);
+            imageContainer.setBackground(new Background(new BackgroundFill(Color.DARKGRAY, null, null)));
+            imageContainer.setStyle("-fx-background-color: lightgray; -fx-background-radius: 10;");
+            // ImageView dailyImage = new ImageView(new Image("ui/images/" + dailyIcons.get(i) + ".png",
+            //        40, 40, false, false));
             Label timeLabel = new Label(dailyTimes.get(i));
             timeLabel.setFont(Font.font("Segoe UI", 20));
             Label highLabel = new Label(Math.round(dailyHigh.get(i)) + tempUnits);
             highLabel.setFont(Font.font("Segoe UI", 16));
             Label lowLabel = new Label(Math.round(dailyLow.get(i)) + tempUnits);
             lowLabel.setFont(Font.font("Segoe UI", 16));
-            day.getChildren().addAll(timeLabel, highLabel, lowLabel, dailyImage);
+            day.getChildren().addAll(timeLabel, highLabel, lowLabel, imageContainer);
             dailyConditions.getChildren().add(day);
         }
 
@@ -155,6 +169,14 @@ public class DashboardController extends MasterController {
         dailyIcons = darkSky.getDailyIcons();
     }
 
+    private static String capitalizeFirstCharacter(String input) {
+        if (input == null || input.isEmpty()) {
+            return input;
+        }
+
+        return Character.toUpperCase(input.charAt(0)) + input.substring(1);
+    }
+
     private void setCurrentConditions() {
         Label tempLabel = new Label(Math.round(current.getTemperature()) + tempUnits);
         tempLabel.setFont(Font.font("Segoe UI", 40));
@@ -165,12 +187,17 @@ public class DashboardController extends MasterController {
         temps.getChildren().addAll(tempLabel, apparentTempLabel);
         temps.setMaxHeight(10);
 
-        Label summaryLabel = new Label(current.getSummary());
+        Label summaryLabel = new Label(capitalizeFirstCharacter(current.getSummary()));
         summaryLabel.setFont(Font.font("Segoe UI", 26));
 
-        ImageView currentImage = new ImageView(new Image("ui/images/" + current.getIcon() + ".png"));
+        ImageView currentImage = new ImageView(new Image("https://openweathermap.org/img/wn/" + current.getIcon() + "@2x.png"));
+        Pane imageContainer = new Pane();
+        imageContainer.getChildren().add(currentImage);
+        imageContainer.setBackground(new Background(new BackgroundFill(Color.DARKGRAY, null, null)));
+        imageContainer.setStyle("-fx-background-color: lightgray; -fx-background-radius: 10;");
+        // ImageView currentImage = new ImageView(new Image("ui/images/" + current.getIcon() + ".png"));
 
-        currentConditions.getChildren().addAll(currentImage, temps, summaryLabel, details);
+        currentConditions.getChildren().addAll(imageContainer, temps, summaryLabel, details);
         currentConditions.setPadding(new Insets(10, 10, 0, 120));
         currentConditions.setAlignment(Pos.CENTER_LEFT);
     }
@@ -179,27 +206,27 @@ public class DashboardController extends MasterController {
         Label humidityLabel = new Label("Humidity: " + current.getHumidity() + "%");
         humidityLabel.setFont(Font.font("Segoe UI", 16));
 
-        Label precipLabel = new Label("Precip. Intensity: " + current.getPrecipIntensity() + " "
+        Label precipLabel = new Label("Precip. intensity: " + current.getPrecipIntensity() + " "
                 + precipUnits);
         precipLabel.setFont(Font.font("Segoe UI", 16));
 
-        Label precipProbabilityLabel = new Label("Precip. Probability: " + current.getPrecipProbability());
-        precipProbabilityLabel.setFont(Font.font("Segoe UI", 16));
+        Label uvLabel = new Label("UV index: " + current.getUvIndex());
+        uvLabel.setFont(Font.font("Segoe UI", 16));
 
-        detailsLeft.getChildren().addAll(humidityLabel, precipLabel, precipProbabilityLabel);
+        detailsLeft.getChildren().addAll(humidityLabel, precipLabel, uvLabel);
         detailsLeft.setPadding(new Insets(0, 0, 0, 50));
         detailsLeft.setMaxHeight(10);
     }
 
     private void setDetailsRight() {
-        Label dewPointLabel = new Label("Dew Point: " + current.getDewPoint() + tempUnits);
+        Label dewPointLabel = new Label("Dew point: " + current.getDewPoint() + tempUnits);
         dewPointLabel.setFont(Font.font("Segoe UI", 16));
 
-        Label windLabel = new Label("Wind Speed: " + current.getWindSpeed() + " " + windUnits
+        Label windLabel = new Label("Wind speed: " + current.getWindSpeed() + " " + windUnits
                 + " at " + current.getWindBearing() + "°");
         windLabel.setFont(Font.font("Segoe UI", 16));
 
-        Label pressureLabel = new Label("Pressure: " + current.getPressure() + " Pa");
+        Label pressureLabel = new Label("Pressure: " + current.getPressure() + " hPa");
         pressureLabel.setFont(Font.font("Segoe UI", 16));
 
 
@@ -224,7 +251,7 @@ public class DashboardController extends MasterController {
         seriesTemp = new XYChart.Series();
         seriesTemp.setName("Temperature");
         seriesApparentTemp = new XYChart.Series();
-        seriesApparentTemp.setName("Feels Like (if available)");
+        seriesApparentTemp.setName("Feels like");
 
         ArrayList<Double> hourlyTemps = darkSky.getHourlyTemps();
         ArrayList<Double> hourlyApparentTemps = darkSky.getHourlyApparentTemps();

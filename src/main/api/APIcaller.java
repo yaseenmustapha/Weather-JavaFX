@@ -11,9 +11,9 @@ import java.net.URL;
 
 public abstract class APIcaller {
 
-    public static final String googleApiKey = "AIzaSyDQQdJfzFRriSqWDsik4B3gOfC09RUmIEY";
+    public static final String googleApiKey = System.getenv("GOOGLE_API_KEY");
 
-    public static final String darkSkyApiKey = "a44d0775e4a62974499471b90c274895";
+    public static final String darkSkyApiKey = System.getenv("OPENWEATHER_API_KEY");
 
     public String errorMessage;
 

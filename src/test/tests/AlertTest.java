@@ -11,8 +11,7 @@ public class AlertTest {
 
     @BeforeEach
     public void setup() {
-        alert = new Alert("Warning", 1565337600, 1565341200, "Description",
-                "https://www.google.ca/");
+        alert = new Alert("Warning", 1565337600, 1565341200, "Description");
     }
 
     @Test
@@ -25,10 +24,6 @@ public class AlertTest {
         assertEquals(alert.getDescription(), "Description");
     }
 
-    @Test
-    public void checkUri() {
-        assertEquals(alert.getUri(), "https://www.google.ca/");
-    }
 
     @Test
     public void checkGetters() {

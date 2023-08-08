@@ -32,14 +32,14 @@ public class DarkSky extends APIcaller {
         this.location = location;
         String units;
         if (User.getCurrentUser().isMetric()) {
-            units = "ca";
+            units = "metric";
         } else {
-            units = "us";
+            units = "imperial";
         }
         try {
-            setURL(new URL("https://api.darksky.net/forecast/" + darkSkyApiKey + "/"
-                    + this.location.getLatitude() + "," + this.location.getLongitude()
-                    + "?exclude=minutely,flags&units=" + units));
+            setURL(new URL("https://api.openweathermap.org/data/3.0/onecall?lat="
+                    + this.location.getLatitude() + "&lon=" + this.location.getLongitude()
+                    + "&exclude=minutely&units=" + units + "&appid=" + darkSkyApiKey));
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
@@ -59,17 +59,17 @@ public class DarkSky extends APIcaller {
             throw new ParseException();
         } else {
             JSONObject obj = new JSONObject(responseBody);
-            currently = getConditions(obj.getJSONObject("currently"));
+            currently = getConditions(obj.getJSONObject("current"));
 
-            setHourly(obj.getJSONObject("hourly"));
-            setDaily(obj.getJSONObject("daily"));
+            setHourly(obj.getJSONArray("hourly"));
+            setDaily(obj.getJSONArray("daily"));
 
             if (obj.has("alerts")) {
                 System.out.println("ALERT DETECTED");
                 JSONArray alerts = obj.getJSONArray("alerts");
                 JSONObject alert = alerts.getJSONObject(0);
-                Alert warning = new Alert(alert.getString("title"), alert.getInt("time"),
-                        alert.getInt("expires"), alert.getString("description"), alert.getString("uri"));
+                Alert warning = new Alert(alert.getString("event"), alert.getInt("start"),
+                        alert.getInt("end"), alert.getString("description"));
                 this.location.setAlert(warning);
             } else {
                 System.out.println("NO ALERTS");
@@ -78,17 +78,18 @@ public class DarkSky extends APIcaller {
         }
     }
 
-    private void setDaily(JSONObject daily) {
-        JSONArray data = daily.getJSONArray("data");
+    private void setDaily(JSONArray daily) {
         DateFormat dateFormat = new SimpleDateFormat("E dd");
 
-        for (int i = 1; i < data.length(); i++) {
-            JSONObject day = data.getJSONObject(i);
-            dailyHigh.add(day.getDouble("temperatureHigh"));
-            dailyLow.add(day.getDouble("temperatureLow"));
-            dailyTimes.add(dateFormat.format(new Date((long)day.getInt("time") * 1000)));
-            dailyIcons.add(day.getString("icon"));
-            System.out.println(dateFormat.format(new Date((long)day.getInt("time") * 1000)));
+        for (int i = 1; i < daily.length(); i++) {
+            JSONObject day = daily.getJSONObject(i);
+            JSONObject temp = day.getJSONObject("temp");
+            dailyHigh.add(temp.getDouble("max"));
+            dailyLow.add(temp.getDouble("min"));
+            dailyTimes.add(dateFormat.format(new Date((long)day.getInt("dt") * 1000)));
+            JSONObject weatherObj = day.getJSONArray("weather").getJSONObject(0);
+            dailyIcons.add(weatherObj.getString("icon"));
+            System.out.println(dateFormat.format(new Date((long)day.getInt("dt") * 1000)));
         }
     }
 
@@ -108,16 +109,15 @@ public class DarkSky extends APIcaller {
         return dailyIcons;
     }
 
-    private void setHourly(JSONObject hourly) {
-        JSONArray data = hourly.getJSONArray("data");
+    private void setHourly(JSONArray hourly) {
         DateFormat dateFormat = new SimpleDateFormat("HH");
 
-        for (int i = 0; i < data.length(); i++) {
-            JSONObject hour = data.getJSONObject(i);
-            int hourInt = Integer.parseInt(dateFormat.format(new Date((long)hour.getInt("time") * 1000)));
+        for (int i = 0; i < hourly.length(); i++) {
+            JSONObject hour = hourly.getJSONObject(i);
+            int hourInt = Integer.parseInt(dateFormat.format(new Date((long)hour.getInt("dt") * 1000)));
             if (!hourlyTimes.contains(hourInt)) {
-                hourlyTemps.add(hour.getDouble("temperature"));
-                hourlyApparentTemps.add(hour.getDouble("apparentTemperature"));
+                hourlyTemps.add(hour.getDouble("temp"));
+                hourlyApparentTemps.add(hour.getDouble("feels_like"));
                 hourlyTimes.add(hourInt);
             }
         }
@@ -136,12 +136,27 @@ public class DarkSky extends APIcaller {
     }
 
     private Conditions getConditions(JSONObject obj) {
-        return new Conditions(obj.getInt("time"), obj.getString("summary"),
-                obj.getString("icon"), obj.getDouble("precipIntensity"),
-                obj.getDouble("precipProbability"), obj.getDouble("temperature"),
-                obj.getDouble("apparentTemperature"), obj.getDouble("dewPoint"),
-                obj.getDouble("humidity"), obj.getDouble("pressure"),
-                obj.getDouble("windSpeed"), obj.getInt("windBearing"));
+        JSONObject weatherObj = obj.getJSONArray("weather").getJSONObject(0);
+        JSONObject rainObj = obj.optJSONObject("rain");
+        double rain1h = 0.0;
+
+        if (rainObj != null) {
+            rain1h = rainObj.optDouble("1h", 0.0);
+        }
+
+        return new Conditions(
+                obj.getInt("dt"),
+                weatherObj.getString("description"),
+                weatherObj.getString("icon"),
+                rain1h,
+                obj.getDouble("uvi"),
+                obj.getDouble("temp"),
+                obj.getDouble("feels_like"),
+                obj.getDouble("dew_point"),
+                obj.getInt("humidity"),
+                obj.getInt("pressure"),
+                obj.getDouble("wind_speed"),
+                obj.getInt("wind_deg"));
     }
 
     public Conditions getCurrently() {
