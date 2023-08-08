@@ -13,22 +13,22 @@ public class MasterController {
 
     @FXML
     public void switchDashboard() throws IOException {
-        setStage("../fxml/Dashboard.fxml", "Dashboard");
+        setStage("Dashboard.fxml", "Dashboard");
     }
 
     @FXML
     public void switchLocationManager() throws IOException {
-        setStage("../fxml/LocationManager.fxml", "Location Manager");
+        setStage("LocationManager.fxml", "Location Manager");
     }
 
     @FXML
     public void switchUserManager() throws IOException {
-        setStage("../fxml/UserManager.fxml", "User Manager");
+        setStage("UserManager.fxml", "User Manager");
     }
 
     private void setStage(String fxml, String title) throws IOException {
         Stage stage = WeatherApp.stage;
-        Parent root = FXMLLoader.load(getClass().getResource(fxml));
+        Parent root = FXMLLoader.load(getClass().getResource("/ui/fxml/" + fxml));
         Scene scene = new Scene(root);
         stage.setTitle(title);
         stage.setScene(scene);
